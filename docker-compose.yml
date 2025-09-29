@@ -41,27 +41,6 @@ services:
     depends_on:
       - mongo-db 
 
-  # ----------------------------------------
-  # 3. SERVIÇO DO FRONTEND (React/Nginx)
-  # ----------------------------------------
-  frontend:
-    build:
-      context: ./template-portifolio
-      dockerfile: Dockerfile.frontend
-    container_name: portifolio_frontend
-    restart: always
-    
-    # Porta exposta para o host (http://localhost)
-    ports:
-      - "80:80" 
-      
-    environment:
-      # A URL que o navegador (no seu PC) usa para acessar o backend
-      REACT_APP_API_URL: http://localhost:2100
-      
-    depends_on:
-      - backend
-
 # ----------------------------------------
 # VOLUMES
 # ----------------------------------------
