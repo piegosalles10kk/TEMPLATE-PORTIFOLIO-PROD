@@ -1,0 +1,43 @@
+# ----------------------------------------
+# 1. Dependências e Pastas Temporárias
+# ----------------------------------------
+# Exclui todos os diretórios node_modules em qualquer nível
+node_modules/
+
+# Logs e arquivos de debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.log
+
+# Arquivos de Lock
+yarn.lock
+
+# Arquivos de IDE (VS Code, etc.)
+.vscode/
+.idea/
+
+# ----------------------------------------
+# 2. Configurações e Variáveis de Ambiente
+# ----------------------------------------
+# Arquivos de variáveis de ambiente locais (se você usar)
+.env
+.env.local
+
+# ----------------------------------------
+# 3. Exclusões Específicas do Projeto/Docker
+# ----------------------------------------
+# Exclui a pasta de build do React (embora o Dockerfile a crie)
+template-portifolio/build/
+
+# Exclui a pasta de volumes persistentes do MongoDB (dados)
+# O Docker Compose cria a pasta .docker/volumes ou similar; ignore-a.
+# A pasta de volumes do banco de dados (mongo_data)
+.docker/
+mongo_data/
+
+# ----------------------------------------
+# 4. Exclusão da Pasta template-portifolio (Frontend)
+# ----------------------------------------
+# ATENÇÃO: Se você realmente não quer versionar o frontend:
+templates/

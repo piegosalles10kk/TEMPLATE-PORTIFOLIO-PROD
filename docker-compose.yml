@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------
+  # 1. SERVIÇO DO MONGODB
+  # ----------------------------------------
+  mongo-db:
+    image: mongo:4.4
+    container_name: mongodb_data
+    restart: always
+    
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: userroot
+      MONGO_INITDB_ROOT_PASSWORD: senhasegura
+      MONGO_INITDB_DATABASE: portifolio_db
+      
+    volumes:
+      # Volume para persistência de dados
+      - mongodb_data:/data/db
+
+  # ----------------------------------------
+  # 2. SERVIÇO DO BACKEND (Node.js/Express)
+  # ----------------------------------------
+  backend:
+    build: 
+      context: ./backend # Caminho para a pasta do seu backend
+      dockerfile: Dockerfile
+    container_name: portifolio_backend
+    restart: always
+    
+    # Porta exposta para o host (para o navegador chamar via localhost:2100)
+    ports:
+      - "2100:2100" 
+      
+    environment:
+      # URI CORRETA: O host é o nome do serviço Docker Compose: 'mongo-db'
+      MONGO_URI: mongodb://userroot:senhasegura@mongo-db:27017/portifolio_db?authSource=admin
+      PORT: 2100
+
+    # Adiciona a dependência para garantir que o banco de dados comece a subir primeiro
+    depends_on:
+      - mongo-db 
+
+  # ----------------------------------------
+  # 3. SERVIÇO DO FRONTEND (React/Nginx)
+  # ----------------------------------------
+  frontend:
+    build:
+      context: ./template-portifolio
+      dockerfile: Dockerfile.frontend
+    container_name: portifolio_frontend
+    restart: always
+    
+    # Porta exposta para o host (http://localhost)
+    ports:
+      - "80:80" 
+      
+    environment:
+      # A URL que o navegador (no seu PC) usa para acessar o backend
+      REACT_APP_API_URL: http://localhost:2100
+      
+    depends_on:
+      - backend
+
+# ----------------------------------------
+# VOLUMES
+# ----------------------------------------
+volumes:
+  mongodb_data:
+    driver: local

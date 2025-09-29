@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  # Nome do serviço no Docker Compose
+  frontend:
+    # Instrução para construir a imagem a partir do Dockerfile no diretório atual
+    build: 
+      context: ./
+    # Nome do contêiner
+    container_name: portifolio_frontend
+    # Garante que o contêiner reinicie em caso de falha
+    restart: always
+    
+    # Mapeia a porta 500 da sua VPS (host) para a porta 500 do contêiner
+    ports:
+      - "500:500"

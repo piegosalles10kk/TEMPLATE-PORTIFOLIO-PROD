@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Portfólio e Projetos</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body class="dark-mode">
+    <button class="mode-toggle" id="modeToggle">☀️ Mudar para Modo Claro</button>
+
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#" data-target="portifolio-section" class="active">Portfólio</a></li> 
+            <li><a href="#" data-target="projetos-section">Projetos</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <div id="message"></div>
+
+        <div id="portifolio-section" class="content-section">
+            <h1>Cadastrar / Editar Portfólio Geral</h1>
+            <form id="portifolioForm">
+                <h2>Informações Pessoais & Contato</h2>
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="nomePortifolio">Seu Nome/Título:</label>
+                        <input type="text" id="nomePortifolio" name="nomePortifolio" required placeholder="Ex: João da Silva">
+                    </div>
+                    <div class="form-field">
+                        <label for="cargoPortifolio">Cargo Principal:</label>
+                        <input type="text" id="cargoPortifolio" name="cargoPortifolio" required placeholder="Ex: Desenvolvedor Full Stack">
+                    </div>
+                </div>
+
+                <div class="form-field">
+                    <label for="sobrePortifolio">Sobre Mim (Resumo):</label>
+                    <textarea id="sobrePortifolio" name="sobrePortifolio" rows="4" required placeholder="Fale um pouco sobre sua carreira, foco e objetivos..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="githubPortifolio">URL GitHub:</label>
+                        <input type="text" id="githubPortifolio" name="githubPortifolio" placeholder="https://github.com/seuperfil">
+                    </div>
+                    <div class="form-field">
+                        <label for="linkedinPortifolio">URL LinkedIn:</label>
+                        <input type="text" id="linkedinPortifolio" name="linkedinPortifolio" placeholder="https://linkedin.com/in/seuperfil">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="telefonePortifolio">Telefone (Somente Números):</label>
+                        <input type="text" id="telefonePortifolio" name="telefonePortifolio" required placeholder="Ex: 5511999999999">
+                    </div>
+                    <div class="form-field">
+                        <label for="emailPortifolio">Email (Contato):</label>
+                        <input type="text" id="emailPortifolio" name="emailPortifolio" required placeholder="Ex: seuemail@dominio.com">
+                    </div>
+                </div>
+
+                <hr style="border-color: var(--border-color); margin: 30px 0;">
+
+                <h2>Tecnologias e Nível (Habilidades)</h2>
+                <p>Adicione Linguagem e Nível (1-10) para suas habilidades gerais.</p>
+
+                <div class="form-group" id="tecnologiasForm">
+                    </div>
+                <div class="tag-list" id="tecnologiasList">
+                    </div>
+
+                <hr style="border-color: var(--border-color); margin: 30px 0;">
+
+                <h2>Experiência Profissional</h2>
+                <div id="experienciaContainer">
+                    </div>
+                <button type="button" id="addExperienciaBtn" style="width: auto;">➕ Adicionar Nova Experiência</button>
+
+
+                <button type="submit" id="submitPortifolioBtn">Salvar Portifólio Geral</button>
+                <button type="button" id="clearPortifolioBtn">Limpar Formulário</button>
+            </form>
+        </div>
+        <div id="projetos-section" class="content-section hidden">
+            <h1>Cadastrar Novo Projeto</h1>
+            <form id="projetoForm">
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="tituloProjeto">Título do Projeto:</label>
+                        <input type="text" id="tituloProjeto" name="tituloProjeto" required placeholder="Ex: Portfólio Pessoal">
+                    </div>
+                    <div class="form-field">
+                        <label for="resumoProjeto">Resumo (Breve Descrição):</label>
+                        <input type="text" id="resumoProjeto" name="resumoProjeto" required placeholder="Ex: App para exibir projetos e habilidades.">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="backendInput">Backend:</label>
+                        <div class="array-input-container">
+                            <input type="text" id="backendInput" placeholder="Ex: Node.js">
+                            <button type="button" data-field="backend" onclick="addItem(this)">+</button>
+                        </div>
+                        <div class="tag-list" id="backendTags"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="frontendInput">Frontend:</label>
+                        <div class="array-input-container">
+                            <input type="text" id="frontendInput" placeholder="Ex: React">
+                            <button type="button" data-field="frontend" onclick="addItem(this)">+</button>
+                        </div>
+                        <div class="tag-list" id="frontendTags"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="dBInput">Banco de Dados (DB):</label>
+                        <div class="array-input-container">
+                            <input type="text" id="dBInput" placeholder="Ex: MongoDB">
+                            <button type="button" data-field="dB" onclick="addItem(this)">+</button>
+                        </div>
+                        <div class="tag-list" id="dBTags"></div>
+                    </div>
+                    <div class="form-field">
+                        <label for="deployInput">Deploy (Plataformas):</label>
+                        <div class="array-input-container">
+                            <input type="text" id="deployInput" placeholder="Ex: Vercel">
+                            <button type="button" data-field="deploy" onclick="addItem(this)">+</button>
+                        </div>
+                        <div class="tag-list" id="deployTags"></div>
+                    </div>
+                </div>
+                
+                <div class="form-field">
+                    <label for="imagemProjeto">URL da Imagem (Preview):</label>
+                    <input type="text" id="imagemProjeto" name="imagemProjeto" required placeholder="Ex: https://link.para.imagem/preview.jpg">
+                </div>
+
+                <div class="form-field">
+                    <label for="descricaoCompletaProjeto">Descrição Completa:</label>
+                    <textarea id="descricaoCompletaProjeto" name="descricaoCompletaProjeto" rows="4" required placeholder="Descreva a arquitetura, desafios e funcionalidades principais..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-field">
+                        <label for="gitHubProjeto">URL GitHub:</label>
+                        <input type="text" id="gitHubProjeto" name="gitHubProjeto" required placeholder="Ex: https://github.com/usuario/projeto">
+                    </div>
+                    <div class="form-field">
+                        <label for="deployProjeto">URL Deploy (Opcional):</label>
+                        <input type="text" id="deployProjeto" name="deployProjeto" placeholder="Ex: https://app.live/projeto">
+                    </div>
+                </div>
+
+                <button type="submit">Enviar Projeto para o Backend</button>
+            </form>
+
+            <div class="project-list-section">
+                <h2>Projetos Cadastrados</h2>
+                <div class="search-group">
+                    <input type="text" id="searchInput" placeholder="Pesquisar por título, tecnologia, link do GitHub, etc...">
+                    <button type="button" onclick="filterProjects()">Pesquisar</button>
+                </div>
+
+                <table class="project-table">
+                    <thead>
+                        <tr>
+                            <th class="project-image-col">Preview</th>
+                            <th>Título do Projeto</th>
+                            <th>GitHub Link</th>
+                            <th>Deploy Link</th> 
+                            <th>Tecnologias (Top 3)</th>
+                            <th class="project-actions">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="projectsTableBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Carregando projetos...</td> 
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+
+    <div id="deleteModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirmar Deleção</h2>
+            <p>Tem certeza que deseja deletar o projeto "<strong id="projectNameInModal"></strong>"?</p>
+            <div class="modal-buttons">
+                <button id="confirmDeleteBtn">Sim, Deletar</button>
+                <button id="cancelDeleteBtn">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
