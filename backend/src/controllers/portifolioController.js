@@ -39,23 +39,41 @@ const createOrUpdatePortifolio = async (req, res) => {
     }
 };
 
-const getAllPortifolios   = async (req, res) => {
+const getAllPortifolios = async (req, res) => {
     try {
-            const portifolios = await Portifolio.find();
-            
-            if (portifolios.length === 0) {
-                return res.status(404).json({ msg: 'Nenhum Portifólio encontrado.' });
-            }
+        const portifolios = await Portifolio.find().lean(); // Usamos .lean() para obter objetos JS simples e acelerar a manipulação
 
-            res.status(200).json(portifolios);
-
-        } catch (error) {
-            console.error('Erro ao buscar Portifólios:', error);
-            res.status(500).json({ 
-                msg: 'Erro ao buscar Portifólios', 
-                error: error.message 
-            });
+        if (portifolios.length === 0) {
+            return res.status(404).json({ msg: 'Nenhum Portifólio encontrado.' });
         }
+
+        // 2. Itera sobre os portfólios e ordena o array 'experiencia'
+        const portifoliosOrdenados = portifolios.map(portifolio => {
+            
+            // Aplica a lógica de ordenação:
+            portifolio.experiencia.sort((a, b) => {
+                // a. Prioridade 1: dataFim inexistente (trabalho atual)
+                const aFim = a.dataFim ? a.dataFim.getTime() : Infinity;
+                const bFim = b.dataFim ? b.dataFim.getTime() : Infinity;
+
+                // Ordena do mais recente (maior número) para o mais antigo (menor número).
+                // Infinity (dataFim inexistente) vem antes de qualquer data.
+                return bFim - aFim; 
+            });
+
+            return portifolio;
+        });
+
+        // 3. Devolve a resposta com o array ordenado
+        res.status(200).json(portifoliosOrdenados);
+
+    } catch (error) {
+        console.error('Erro ao buscar Portifólios:', error);
+        res.status(500).json({ 
+            msg: 'Erro ao buscar Portifólios', 
+            error: error.message 
+        });
+    }
 };
 
 
