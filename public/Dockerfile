@@ -1,46 +1,42 @@
 # ----------------------------------------
-# STAGE 1: Build (Cria a pasta 'build')
+# STAGE 1: builder (Cria a pasta 'build')
 # ----------------------------------------
 FROM node:20-alpine AS builder
 
-# Define o diretório de trabalho dentro do container
+# Define o diretório de trabalho
 WORKDIR /app
 
-# Copia os arquivos package.json e package-lock.json
-# Isso permite que o Docker use o cache se as dependências não mudarem
-COPY package.json package-lock.json ./
+# Adiciona o diretório de binários do Node ao PATH para o 'react-scripts' ser encontrado
+ENV PATH /app/node_modules/.bin:$PATH
 
-# Instala todas as dependências (incluindo devDependencies)
-# Usamos 'ci' para garantir que as versões sejam as do lockfile
+# Copia e instala as dependências
+COPY package.json package-lock.json ./
+# Usamos 'ci' para instalações limpas em ambientes de CI/CD
 RUN npm ci
 
-# Copia o restante dos arquivos do projeto
+# Copia o restante do código
 COPY . .
 
-# Roda o comando build (gera a pasta 'build')
-# Este comando usa o react-scripts build, que está nas suas dependências
+# Roda o comando build, gerando a pasta 'build'
 RUN npm run build
 
 
 # ----------------------------------------
-# STAGE 2: Production (Serve o build)
+# STAGE 2: production (Serve o build)
 # ----------------------------------------
 FROM node:20-alpine
 
 # Define o diretório de trabalho
 WORKDIR /app
 
-# Copia APENAS as dependências que são necessárias em tempo de execução
-# O 'serve' está em devDependencies, então instalamos ele globalmente/diretamente aqui.
+# Instala o pacote 'serve' globalmente
 RUN npm install -g serve
 
-# Copia a pasta 'build' gerada no Stage 1 (builder)
+# Copia a pasta 'build' gerada no Stage 1
 COPY --from=builder /app/build ./build
 
-# Expõe a porta que será usada pelo 'serve' (3050)
-EXPOSE 3050
+# Expõe a porta 500
+EXPOSE 500
 
-# Comando para iniciar o servidor. 
-# Ele replica o seu script 'npm run start-prod'
-# O -s build serve a pasta build, e o -l 3050 define a porta de escuta
-CMD ["serve", "-s", "build", "-l", "3050"]
+# Comando para iniciar o servidor na porta 500
+CMD ["serve", "-s", "build", "-l", "500"]

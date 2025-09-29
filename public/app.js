@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 
 // Define a porta como 3050, mas permite que a variável de ambiente PORT sobrescreva (padrão em hospedagem).
-const PORT = process.env.PORT || 3050; 
+const PORT = process.env.PORT || 500; 
 
 // Caminho para a pasta 'build'
 const buildPath = path.join(__dirname, 'build');
