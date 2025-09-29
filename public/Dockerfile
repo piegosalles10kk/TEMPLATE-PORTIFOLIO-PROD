@@ -1,39 +1,18 @@
 # ----------------------------------------
-# STAGE 1: builder (Cria a pasta 'build')
+# STAGE ÚNICO: production (Dependente do Build Local)
 # ----------------------------------------
-FROM node:20-alpine AS builder
+FROM node:20-alpine 
 
 # Define o diretório de trabalho
 WORKDIR /app
 
-# Adiciona o diretório de binários do Node ao PATH para o 'react-scripts' ser encontrado
-ENV PATH /app/node_modules/.bin:$PATH
-
-# Copia e instala as dependências
-COPY package.json package-lock.json ./
-# Usamos 'ci' para instalações limpas em ambientes de CI/CD
-RUN npm ci
-
-# Copia o restante do código
-COPY . .
-
-# Roda o comando build, gerando a pasta 'build'
-RUN npm run build
-
-
-# ----------------------------------------
-# STAGE 2: production (Serve o build)
-# ----------------------------------------
-FROM node:20-alpine
-
-# Define o diretório de trabalho
-WORKDIR /app
-
-# Instala o pacote 'serve' globalmente
+# Instala o pacote 'serve' globalmente. Ele é necessário para rodar o build.
+# NOTE: O 'serve' estava nas devDependencies do seu package.json.
 RUN npm install -g serve
 
-# Copia a pasta 'build' gerada no Stage 1
-COPY --from=builder /app/build ./build
+# Copia a pasta 'build' do seu disco local para dentro do container
+# O sucesso deste passo depende de você ter rodado 'npm run build' localmente
+COPY build ./build 
 
 # Expõe a porta 500
 EXPOSE 500

@@ -15,7 +15,6 @@ services:
       MONGO_INITDB_DATABASE: portifolio_db
       
     volumes:
-      # Volume para persistência de dados
       - mongodb_data:/data/db
 
   # ----------------------------------------
@@ -28,16 +27,13 @@ services:
     container_name: portifolio_backend
     restart: always
     
-    # Porta exposta para o host (para o navegador chamar via localhost:2100)
     ports:
       - "2100:2100" 
       
     environment:
-      # O host é o nome do serviço Docker Compose: 'mongo-db'
       MONGO_URI: mongodb://userroot:senhasegura@mongo-db:27017/portifolio_db?authSource=admin
       PORT: 2100
 
-    # Adiciona a dependência para garantir que o banco de dados comece a subir primeiro
     depends_on:
       - mongo-db 
       
@@ -45,18 +41,17 @@ services:
   # 3. SERVIÇO DO FRONTEND (React + Serve)
   # ----------------------------------------
   frontend:
-    # O 'context' aponta para a pasta onde está seu Dockerfile do React (public)
+    # O 'context' aponta para a pasta onde está seu Dockerfile (public)
     build: 
       context: ./public 
       dockerfile: Dockerfile
     container_name: portifolio_frontend
     restart: always
     
-    # Mapeia a porta 3050 do container para a porta 3050 do seu computador
+    # Mapeia a porta 500 do container para a porta 500 do seu computador
     ports:
-      - "3050:3050" 
+      - "500:500" 
       
-    # O frontend DEVE esperar que o backend esteja funcionando para começar a fazer requisições
     depends_on:
       - backend
 
