@@ -3,6 +3,3 @@ node_modules
 npm-debug.log
 .git
 .gitignore
-
-# Exclui a pasta de build do contexto de cópia local (ela será gerada no container)
-build

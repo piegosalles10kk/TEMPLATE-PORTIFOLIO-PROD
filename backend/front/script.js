@@ -25,7 +25,7 @@ let portifolioExperiences = [];
 // Variáveis globais para Projetos 
 let allProjects = []; 
 let currentProjectIdToDelete = null;
-const API_URL = 'http://piegosalles-backend.cloud/backend-portifolio'; 
+const API_URL = 'https://piegosalles-backend.cloud/backend-portifolio'; 
 const projectsTableBody = document.getElementById('projectsTableBody'); // Elemento global da tabela
 
 
